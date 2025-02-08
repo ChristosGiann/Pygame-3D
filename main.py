@@ -22,6 +22,7 @@ def main():
 
         keys = pygame.key.get_pressed()
         player.move(keys)
+        player.handle_mouse_movement()  # Προσθήκη ελέγχου ποντικιού
 
         win.fill((0, 0, 0))
         
@@ -36,4 +37,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
