@@ -1,6 +1,6 @@
 import pygame
 import sys
-import os  # Για να επιστρέψουμε στο menu
+import os  # Για επιστροφή στο menu
 from settings import *
 from map import MAP
 from player import Player
@@ -15,13 +15,20 @@ def main():
     # Φορτώνουμε όλες τις υφές
     load_textures()
 
+    # 🔊 Φόρτωση και αναπαραγωγή μουσικής gameplay
+    pygame.mixer.init()
+    pygame.mixer.music.load("gameplay_music.wav")  # Φορτώνει το αρχείο μουσικής
+    pygame.mixer.music.set_volume(0.5)  # Ρυθμίζει την ένταση
+    pygame.mixer.music.play(-1)  # Παίζει σε loop (-1 σημαίνει άπειρο loop)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # ESC → Γυρνάει στο Main Menu
+                if event.key == pygame.K_ESCAPE:  # ESC → Επιστροφή στο Menu
+                    pygame.mixer.music.stop()  # Σταματάει τη μουσική του gameplay
                     pygame.quit()
                     os.system("python menu.py")  # Ξανατρέχει το menu
                     sys.exit()

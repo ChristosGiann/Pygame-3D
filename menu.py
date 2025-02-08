@@ -11,6 +11,13 @@ font = pygame.font.Font(None, 50)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 
+# Φόρτωση και αναπαραγωγή μουσικής
+pygame.mixer.init()
+if not pygame.mixer.music.get_busy():  # Παίζει μόνο αν δεν παίζει ήδη
+    pygame.mixer.music.load("menu_music.wav")  # Φορτώνει το αρχείο μουσικής
+    pygame.mixer.music.set_volume(0.5)  # Ρυθμίζει την ένταση
+    pygame.mixer.music.play(-1)  # Παίζει σε loop (-1 σημαίνει άπειρο loop)
+
 # Επιλογές του μενού
 menu_options = ["Start Game", "Controls", "Exit"]
 selected_option = 0  # Δείχνει ποια επιλογή είναι ενεργή
@@ -73,6 +80,7 @@ def main_menu():
                     selected_option = (selected_option + 1) % len(menu_options)
                 elif event.key == pygame.K_RETURN:  # Επιλογή κουμπιού
                     if selected_option == 0:  # Start Game
+                        pygame.mixer.music.stop()  # Σταματάμε τη μουσική πριν μπει στο παιχνίδι
                         pygame.quit()  # Κλείνει το μενού
                         os.system("python main.py")  # Εκκινεί το παιχνίδι
                         sys.exit()
