@@ -3,7 +3,7 @@ import sys
 from settings import *
 from map import MAP
 from player import Player
-from raycasting import cast_rays, cast_floor, load_texture
+from raycasting import cast_rays, cast_floor, load_textures, render_sky
 
 def main():
     pygame.init()
@@ -11,21 +11,23 @@ def main():
     clock = pygame.time.Clock()
     player = Player()
 
-    # Φόρτωση των υφών μετά την αρχικοποίηση του Pygame
-    load_texture()
+    # Φορτώνουμε όλες τις υφές
+    load_textures()
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        
+
         keys = pygame.key.get_pressed()
         player.move(keys)
-        
+
         win.fill((0, 0, 0))
         
-        # Απόδοση πατώματος και τοίχων
+        # Ζωγραφίζουμε τον ουρανό
+        render_sky(win)
+        # Αποδίδουμε το πάτωμα και τους τοίχους
         cast_floor(win, player)
         cast_rays(win, player)
         
@@ -34,3 +36,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
