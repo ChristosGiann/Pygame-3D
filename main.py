@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os  # Για να επιστρέψουμε στο menu
 from settings import *
 from map import MAP
 from player import Player
@@ -19,10 +20,15 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:  # ESC → Γυρνάει στο Main Menu
+                    pygame.quit()
+                    os.system("python menu.py")  # Ξανατρέχει το menu
+                    sys.exit()
 
         keys = pygame.key.get_pressed()
         player.move(keys)
-        player.handle_mouse_movement()  # Προσθήκη ελέγχου ποντικιού
+        player.handle_mouse_movement()
 
         win.fill((0, 0, 0))
         
