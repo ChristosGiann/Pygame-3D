@@ -9,7 +9,7 @@ font = pygame.font.Font(None, 50)
 
 # Χρώματα
 WHITE = (255, 255, 255)
-YELLOW = (255, 255, 0)
+RED = (255, 0, 0)
 
 # Φόρτωση και αναπαραγωγή μουσικής
 pygame.mixer.init()
@@ -19,17 +19,21 @@ if not pygame.mixer.music.get_busy():  # Παίζει μόνο αν δεν πα�
     pygame.mixer.music.play(-1)  # Παίζει σε loop (-1 σημαίνει άπειρο loop)
 
 # Επιλογές του μενού
-menu_options = ["Start Game", "Controls", "Exit"]
+menu_options = ["Start Game", "Controls", "How to Play", "Exit"]
 selected_option = 0  # Δείχνει ποια επιλογή είναι ενεργή
 
+# Φόρτωση εικόνας φόντου
+background_image = pygame.image.load("maze.png").convert()
+background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
 def draw_menu():
-    """Σχεδιάζει το main menu στην οθόνη"""
-    win.fill((0, 0, 0))  # Μαύρο background
-    title = font.render("Main Menu", True, WHITE)
+    """Σχεδιάζει το start menu στην οθόνη"""
+    win.blit(background_image, (0, 0))  # Φόντο
+    title = font.render("Escape", True, WHITE)
     win.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 100))
 
     for i, option in enumerate(menu_options):
-        color = YELLOW if i == selected_option else WHITE
+        color = RED if i == selected_option else WHITE
         text = font.render(option, True, color)
         win.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, 250 + i * 60))
 
@@ -46,6 +50,7 @@ def show_controls():
         controls_text = [
             "WASD - Move",
             "Mouse - Look Around",
+            "E - Interact",
             "ESC - Back to Menu"
         ]
 
@@ -63,8 +68,35 @@ def show_controls():
                 if event.key == pygame.K_ESCAPE:  # ESC → Πίσω στο Menu
                     running = False
 
+def show_how_to_play():
+    """Σχεδιάζει το how to play menu"""
+    running = True
+    while running:
+        win.fill((0, 0, 0))
+        title = font.render("How to Play", True, WHITE)
+        win.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 100))
+
+        how_to_play_text = [
+            "You entered through a magic portal,",
+            "find the exit portal to escape the maze."
+        ]
+
+        for i, text in enumerate(how_to_play_text):
+            text_surface = font.render(text, True, WHITE)
+            win.blit(text_surface, (SCREEN_WIDTH // 2 - text_surface.get_width() // 2, 200 + i * 50))
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:  # ESC → Πίσω στο Menu
+                    running = False
+
 def main_menu():
-    """Διαχειρίζεται το main menu"""
+    """Διαχειρίζεται το start menu"""
     global selected_option
     running = True
     while running:
@@ -86,7 +118,9 @@ def main_menu():
                         sys.exit()
                     elif selected_option == 1:  # Controls
                         show_controls()
-                    elif selected_option == 2:  # Exit
+                    elif selected_option == 2:  # How to Play
+                        show_how_to_play()
+                    elif selected_option == 3:  # Exit
                         pygame.quit()
                         sys.exit()
 
