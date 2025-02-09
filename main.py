@@ -4,7 +4,17 @@ import os  # Για επιστροφή στο menu
 from settings import *
 from map import MAP
 from player import Player
-from raycasting import cast_rays, cast_floor, load_textures, render_sky
+from raycasting import cast_rays, cast_floor, load_textures, render_sky, check_gate_interaction
+
+def play_gate_sound_if_in_range(player, gate_row, gate_col, interaction_range, gate_sound):
+    """Παίζει ήχο αν ο παίκτης είναι εντός διπλάσιου εύρους της πύλης."""
+    player_row = int(player.y / TILE_SIZE)
+    player_col = int(player.x / TILE_SIZE)
+    distance = ((player_row - gate_row) ** 2 + (player_col - gate_col) ** 2) ** 0.5
+
+    # Αν ο παίκτης είναι εντός διπλάσιου εύρους, παίζει ο ήχος
+    if distance <= 2 * interaction_range:
+        gate_sound.play()
 
 def main():
     pygame.init()
@@ -21,6 +31,9 @@ def main():
     pygame.mixer.music.set_volume(0.5)  # Ρυθμίζει την ένταση
     pygame.mixer.music.play(-1)  # Παίζει σε loop (-1 σημαίνει άπειρο loop)
 
+    # Φόρτωση ήχου για την πύλη
+    gate_sound = pygame.mixer.Sound("gate_sound.mp3")
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -32,6 +45,18 @@ def main():
                     pygame.quit()
                     os.system("python menu.py")  # Ξανατρέχει το menu
                     sys.exit()
+                if event.key == pygame.K_e and check_gate_interaction(player):
+                    print("You escaped!")
+                    pygame.mixer.music.stop()
+                    pygame.quit()
+                    os.system("python menu.py")  # Επιστροφή στο menu
+                    sys.exit()
+                if event.key == pygame.K_v:  # V → Teleport μπροστά από την πύλη
+                    player.x = 30 * TILE_SIZE + TILE_SIZE // 2  # Στήλη της πύλης
+                    player.y = 11 * TILE_SIZE + TILE_SIZE // 2  # Γραμμή της πύλης
+        
+        # Παίζει τον ήχο αν ο παίκτης είναι εντός διπλάσιου εύρους
+        play_gate_sound_if_in_range(player, gate_row=11, gate_col=30, interaction_range=1, gate_sound=gate_sound)
 
         keys = pygame.key.get_pressed()
         player.move(keys)
