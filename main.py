@@ -12,7 +12,7 @@ def play_gate_sound_if_in_range(player, gate_row, gate_col, interaction_range, g
     player_col = int(player.x / TILE_SIZE)
     distance = ((player_row - gate_row) ** 2 + (player_col - gate_col) ** 2) ** 0.5
 
-    # Αν ο παίκτης είναι εντός διπλάσιου εύρους, παίζει ο ήχος
+    # Αν ο παίκτης είναι εντός διπλάσιου range, παίζει ο ήχος
     if distance <= 2 * interaction_range:
         gate_sound.play()
 
@@ -22,16 +22,14 @@ def main():
     clock = pygame.time.Clock()
     player = Player()
 
-    # Φορτώνουμε όλες τις υφές
+    # Φορτώνουμε όλες τα textures
     load_textures()
 
-    # 🔊 Φόρτωση και αναπαραγωγή μουσικής gameplay
+    # Αναπαραγωγή μουσικής
     pygame.mixer.init()
     pygame.mixer.music.load("gameplay_music.wav")  # Φορτώνει το αρχείο μουσικής
     pygame.mixer.music.set_volume(0.5)  # Ρυθμίζει την ένταση
     pygame.mixer.music.play(-1)  # Παίζει σε loop (-1 σημαίνει άπειρο loop)
-
-    # Φόρτωση ήχου για την πύλη
     gate_sound = pygame.mixer.Sound("gate_sound.mp3")
 
     while True:
@@ -40,22 +38,22 @@ def main():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # ESC → Επιστροφή στο Menu
-                    pygame.mixer.music.stop()  # Σταματάει τη μουσική του gameplay
+                if event.key == pygame.K_ESCAPE:
+                    pygame.mixer.music.stop()
                     pygame.quit()
-                    os.system("python menu.py")  # Ξανατρέχει το menu
+                    os.system("python menu.py")
                     sys.exit()
                 if event.key == pygame.K_e and check_gate_interaction(player):
                     print("You escaped!")
                     pygame.mixer.music.stop()
                     pygame.quit()
-                    os.system("python menu.py")  # Επιστροφή στο menu
+                    os.system("python menu.py")
                     sys.exit()
                 if event.key == pygame.K_v:  # V → Teleport μπροστά από την πύλη
-                    player.x = 30 * TILE_SIZE + TILE_SIZE // 2  # Στήλη της πύλης
-                    player.y = 11 * TILE_SIZE + TILE_SIZE // 2  # Γραμμή της πύλης
+                    player.x = 30 * TILE_SIZE + TILE_SIZE // 2  
+                    player.y = 11 * TILE_SIZE + TILE_SIZE // 2 
         
-        # Παίζει τον ήχο αν ο παίκτης είναι εντός διπλάσιου εύρους
+        # Παίζει τον ήχο αν ο παίκτης είναι εντός διπλάσιου range
         play_gate_sound_if_in_range(player, gate_row=11, gate_col=30, interaction_range=1, gate_sound=gate_sound)
 
         keys = pygame.key.get_pressed()
@@ -64,9 +62,8 @@ def main():
 
         win.fill((0, 0, 0))
         
-        # Ζωγραφίζουμε τον ουρανό
+        #Φορτώνουμε περιβάλλον
         render_sky(win)
-        # Αποδίδουμε το πάτωμα και τους τοίχους
         cast_floor(win, player)
         cast_rays(win, player)
         

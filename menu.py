@@ -7,28 +7,27 @@ pygame.init()
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.Font(None, 50)
 
-# Χρώματα
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 
-# Φόρτωση και αναπαραγωγή μουσικής
+#Aναπαραγωγή μουσικής
 pygame.mixer.init()
-if not pygame.mixer.music.get_busy():  # Παίζει μόνο αν δεν παίζει ήδη
-    pygame.mixer.music.load("menu_music.wav")  # Φορτώνει το αρχείο μουσικής
-    pygame.mixer.music.set_volume(0.5)  # Ρυθμίζει την ένταση
-    pygame.mixer.music.play(-1)  # Παίζει σε loop (-1 σημαίνει άπειρο loop)
+if not pygame.mixer.music.get_busy():
+    pygame.mixer.music.load("menu_music.wav") 
+    pygame.mixer.music.set_volume(0.5) 
+    pygame.mixer.music.play(-1)  
 
-# Επιλογές του μενού
+# Menu
 menu_options = ["Start Game", "Controls", "How to Play", "Exit"]
 selected_option = 0  # Δείχνει ποια επιλογή είναι ενεργή
 
-# Φόρτωση εικόνας φόντου
+# Wallpaper
 background_image = pygame.image.load("maze.png").convert()
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 def draw_menu():
     """Σχεδιάζει το start menu στην οθόνη"""
-    win.blit(background_image, (0, 0))  # Φόντο
+    win.blit(background_image, (0, 0)) 
     title = font.render("Escape", True, WHITE)
     win.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 100))
 
@@ -65,7 +64,7 @@ def show_controls():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # ESC → Πίσω στο Menu
+                if event.key == pygame.K_ESCAPE:
                     running = False
 
 def show_how_to_play():
@@ -92,7 +91,7 @@ def show_how_to_play():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # ESC → Πίσω στο Menu
+                if event.key == pygame.K_ESCAPE:
                     running = False
 
 def main_menu():
@@ -106,21 +105,21 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:  # Μετακίνηση πάνω στο μενού
+                if event.key == pygame.K_UP:
                     selected_option = (selected_option - 1) % len(menu_options)
-                elif event.key == pygame.K_DOWN:  # Μετακίνηση κάτω στο μενού
+                elif event.key == pygame.K_DOWN:
                     selected_option = (selected_option + 1) % len(menu_options)
-                elif event.key == pygame.K_RETURN:  # Επιλογή κουμπιού
-                    if selected_option == 0:  # Start Game
-                        pygame.mixer.music.stop()  # Σταματάμε τη μουσική πριν μπει στο παιχνίδι
-                        pygame.quit()  # Κλείνει το μενού
-                        os.system("python main.py")  # Εκκινεί το παιχνίδι
+                elif event.key == pygame.K_RETURN: 
+                    if selected_option == 0: 
+                        pygame.mixer.music.stop() 
+                        pygame.quit()  
+                        os.system("python main.py") 
                         sys.exit()
-                    elif selected_option == 1:  # Controls
+                    elif selected_option == 1: 
                         show_controls()
-                    elif selected_option == 2:  # How to Play
+                    elif selected_option == 2: 
                         show_how_to_play()
-                    elif selected_option == 3:  # Exit
+                    elif selected_option == 3:  
                         pygame.quit()
                         sys.exit()
 

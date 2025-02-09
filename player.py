@@ -10,7 +10,7 @@ class Player:
         self.angle = 180 * math.pi / 180
         self.speed = SPEED
 
-        # Κλείδωμα ποντικιού στην οθόνη
+        # Κλείδωμα ποντικιού 
         pygame.mouse.set_visible(False)
         pygame.event.set_grab(True)
 
@@ -19,16 +19,16 @@ class Player:
         new_y = self.y
         
         # Περιστροφή με A/D ή με το ποντίκι
-        if keys[pygame.K_a]:  # A -> αριστερά
+        if keys[pygame.K_a]: 
             self.angle -= 0.05
-        if keys[pygame.K_d]:  # D -> δεξιά
+        if keys[pygame.K_d]:  
             self.angle += 0.05
 
         # Κίνηση μπροστά/πίσω
-        if keys[pygame.K_w]:  # W -> μπροστά
+        if keys[pygame.K_w]:  
             new_x = self.x + -math.sin(self.angle) * self.speed
             new_y = self.y + +math.cos(self.angle) * self.speed
-        if keys[pygame.K_s]:  # S -> πίσω
+        if keys[pygame.K_s]: 
             new_x = self.x + +math.sin(self.angle) * self.speed
             new_y = self.y + -math.cos(self.angle) * self.speed
         
